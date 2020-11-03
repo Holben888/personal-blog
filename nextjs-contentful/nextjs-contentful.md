@@ -27,11 +27,11 @@ Let's open up Contentful first. We'll be diving straight into our API queries fo
 
 When you're feeling comfortable, whip up a new workspace and create a new Content Model of your choosing. We'll use our "Executive Board Member" model as an example here.
 
-![image-20201102100839574](/Users/benholmes/Library/Application Support/typora-user-images/image-20201102100839574.png)
+![Contentful model example](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/contentful-model.jpg)
 
 Once you've saved this model, go and make some content entries in the "Content" panel. We'll be pulling these down with GraphQL later, so I recommend making more than 1 entry to demo sorting and filtering! You can filter by your content type for a sanity check:
 
-![image-20201102100920998](/Users/benholmes/Library/Application Support/typora-user-images/image-20201102100920998.png)
+![Contentful entry example, filtered by "Executive Board Member"](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/contentful-entries.jpg)
 
 Before moving on, let's get some API keys for our website to use. Just head to "Settings > API keys" and choose "Add API key" in the top right. This should allow you to find two important variables: a **Space ID** and a **Content Delivery API access token.** You'll need these for some important environment variables in your local repo!
 
@@ -64,7 +64,7 @@ We'll be using GraphiQL to so we can view our "schemas" with a nice GUI. [**You 
 
 Opening the app for the first time, you should see a screen like this:
 
-![GraphiQL welcome screen](/Users/benholmes/Library/Application Support/typora-user-images/image-20201103113735556.png)
+![GraphiQL welcome screen](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-welcome.jpg)
 
 Let's point GraphiQL to our Contentful server. You can start by entering the following URL, filling in **[Space ID]** with your API key from the previous section:
 
@@ -76,11 +76,11 @@ If you try to hit the play button ▶️ after this step, you should get an auth
 
 To fix this, click **Edit HTTP Headers** and create a new header entry like so, filling in **[Contentful access token]** with the value from your API keys:
 
-![Edit HTTP headers screen. Make sure Header name = "authorizaton" and Header value = "Bearer [Contentful access token]"](/Users/benholmes/Library/Application Support/typora-user-images/image-20201103114439430.png)
+![Edit HTTP headers screen. Make sure Header name = "authorizaton" and Header value = "Bearer [Contentful access token]"](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-headers.jpg)
 
 After saving, you should see some info appear in your "Documentation Explorer." If you click on the **query: Query** link, you'll see an overview of all your Content models from Contentful.
 
-![Schema explorer overview](/Users/benholmes/Library/Application Support/typora-user-images/image-20201103114956346.png)
+![Schema explorer overview](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-docs.jpg)
 
 Neat! From here, you should see all of the content models you created in your Contentful space. You'll notice there's a distinction between individual entries and a "collection" (i.e. `executiveBoardMember` vs. `executiveBoardMemberCollection`). This is because each represents a different **query** you can perform in your API call. If this terminology confuses you, here's a quick breakdown:
 
@@ -94,7 +94,7 @@ Let's jump into an example. First, let's just get the list of names and emails f
 
 Clicking into the yellow `ExecutiveBoardMemberCollection` link (following the colon : at the end of the query), we should see a few options we're free to retrieve: **total, skip, limit, and items.** You'll see these 4 queries on every collection you create, where **items** represents the actual list of items you're hoping to retrieve. Let's click into the response type for **items** to see the shape of our content:
 
-![Schema for our Executive Board Member content model](/Users/benholmes/Library/Application Support/typora-user-images/image-20201103122228044.png)
+![Schema for our Executive Board Member content model](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-exec-member-entry.jpg)
 
 This should look really similar to the content model you wrote in Contentful! As you can see, we can query for any of these fields to retrieve a response (most of them being strings in this example).
 
@@ -126,7 +126,7 @@ We can simply convert this skeleton to the JSON-y syntax GraphQL expects:
 
 Just enter this into GraphiQL's textbook and hit play ▶️
 
-![Entering our query into GraphiQL, with response data appearing on the right](/Users/benholmes/Library/Application Support/typora-user-images/image-20201103123531556.png)
+![Entering our query into GraphiQL, with response data appearing on the right](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-response.jpg)
 
 Boom! There's all the data we entered into Contentful, formatted as a nice JSON response. If you typed your query into GraphiQL by hand, you may have noticed some nifty autocomplete as you went. This is the beauty of GraphQL: since we know the shape of any possible response, it can autofill your query as you go! 🚀
 
@@ -136,7 +136,7 @@ You may have noticed some purple items in parenthesis while exploring the docs. 
 
 Let's use some of the `collection` filters as an example; say we only want to retrieve board members that have a LinkedIn profile. We can apply this filter using the **where** parameter:
 
-![Applying a filter using "where." Shows how GraphiQL autocomplete will reveal potential parameter values.](/Users/benholmes/Library/Application Support/typora-user-images/image-20201103124023388.png)
+![Applying a filter using "where." Shows how GraphiQL autocomplete will reveal potential parameter values.](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-filter.jpg)
 
 As you can see, `where` accepts an object as a value, where we can apply a set of pre-determined filters from Contentful. As we type, we're greated with a number of comparison options that might remind you of SQL, including the **exists** operator for nullable values. You can find the complete list of supported filters in the docs off to the right, but autocomplete will usually take you to the filter you want 💪
 
@@ -338,7 +338,7 @@ Now, you can reference anything inside `/utils` using this decorator! For conven
 
 Chances are, you'll probably set up some rich text fields in Contentful to handle hyperlinks, headers, and the like. By default, Contentful will return a big JSON blob representing your formatted content:
 
-![GraphiQL response when querying for rich text](/Users/benholmes/Desktop/Screen Shot 2020-11-03 at 3.36.04 PM.png)
+![GraphiQL response when querying for rich text](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-rich-text.jpg)
 
 ...which isn't super useful on its own. To convert this into some nice HTML, you'll need a [special package from Contentful](https://www.npmjs.com/package/@contentful/rich-text-html-renderer):
 
@@ -374,7 +374,10 @@ If you're interested, we deployed our entire project to a CodeSandbox for you to
 ## Thanks for reading! If this article was helpful...
 
 I love writing about this sort of stuff 👨‍💻
+
 ❤️ [**First, please check out the incredible work Hack4Impact is cooking up!**](https://hack4impact.org/)
+
 🐦 [**Follow my Twitter for random web dev tips and articles I find cool**](https://twitter.com/bholmesdev)
+
 📗 [**Follow my personal blog for new posts every 2-3 weeks**](https://dev.to/bholmesdev)
 
