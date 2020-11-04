@@ -7,25 +7,25 @@ No, this post won't help you answer _what tools should I use to build our site's
 - How to access Contentful's GraphQL endpoints (yes, they're free-to-use now!) 📝
 - How to talk to GraphQL server + debug with GraphiQL 📶
 - How we can roll query results into a static NextJS site with `getStaticProps` 🗞
-- Going further with TypeScript 🚀
+- Going further with rich text 🚀
 
 Onwards!
 
 ## Wait, why use these tools?
 
-Some readers might be scoping whether to adopt these tools at all. Our walkthrough should be helpful, but for a TLDR:
+Some readers might be scoping whether to adopt these tools at all. As a TLDR:
 
-1. [**NextJS**](https://nextjs.org) was a perfect match for our team, since we were already comfortable with a React-based workflow and wanted to play to our strengths. What's more, NextJS is flexible enough to build some parts of your website *statically*, and other parts *dynamically* (i.e. with [serverside rendering](https://medium.com/walmartglobaltech/the-benefits-of-server-side-rendering-over-client-side-rendering-5d07ff2cefe8)). This is pretty promising as [our landing site](https://hack4impact.org) expands, where we might add experiences that vary by user going forward (admin portals, nonprofit dashboards, etc).
+1. [**NextJS**](https://nextjs.org) was a great match for our frontend stack, since we were already comfortable with a React-based workflow and wanted to play to our strengths. What's more, NextJS is flexible enough to build some parts of your website *statically*, and other parts *dynamically* (i.e. with [serverside rendering](https://medium.com/walmartglobaltech/the-benefits-of-server-side-rendering-over-client-side-rendering-5d07ff2cefe8)). This is pretty promising as [our landing site](https://hack4impact.org) expands, where we might add experiences that vary by user going forward (admin portals, nonprofit dashboards, etc).
 2. [**Contentful**](https://www.contentful.com) is one of the more popular "headless CMSs" right now, and it's easy to see why. Content types are more than flexible enough for our use cases, and the UI is friendly enough for designers and product managers to navigate confidently. It thrives with "structured content" in particular which is great for static sites like ours! Still, if you're looking for a simplified, key-value store for your copy, there are some [shiny alternatives](https://www.sanity.io) to consider.
 3. [**GraphQL**](https://graphql.org) is the _perfect_ pairing for a CMS in our opinion. You simply define the "shape" of the content you want (with necessary filtering and sorting), and the CMS responds with the associated values. We'll dive into some code samples soon, but it's *much* simpler than a traditional REST endpoint.
 
-There's roughly 10 billion ways to build a static site these days (citation needed), with another [10 billion blog posts](https://www.netlify.com/blog/) on how to tackle the problem. So don't take these reasons as perscriptive! 
+_**Note:** There's roughly 10 billion ways to build a static site these days (citation needed), with another [10 billion blog posts](https://www.netlify.com/blog/) on how to tackle the problem. So don't take these reasons as prescriptive for all teams!_
 
 ## Setting up our Contentful environment
 
-Let's open up Contentful first. We'll be diving straight into our API queries for the sake of this tutorial. Still, if you're 100% new to the platform, Contentful documents a lot of [core concepts over here](https://www.contentful.com/developers/docs/concepts/) to get up to speed!
+Let's open up Contentful first. If you're 100% new to the platform, Contentful documents a lot of [core concepts over here](https://www.contentful.com/developers/docs/concepts/) to get up to speed on "entries" and "content models."
 
-When you're feeling comfortable, whip up a new workspace and create a new Content Model of your choosing. We'll use our "Executive Board Member" model as an example here.
+When you're feeling comfortable, whip up a new workspace and create a new content model of your choosing. We'll use our "Executive Board Member" model as an example here.
 
 ![Contentful model example](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/contentful-model.jpg)
 
@@ -33,7 +33,7 @@ Once you've saved this model, go and make some content entries in the "Content" 
 
 ![Contentful entry example, filtered by "Executive Board Member"](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/contentful-entries.jpg)
 
-Before moving on, let's get some API keys for our website to use. Just head to "Settings > API keys" and choose "Add API key" in the top right. This should allow you to find two important variables: a **Space ID** and a **Content Delivery API access token.** You'll need these for some important environment variables in your local repo!
+Before moving on, let's get some API keys for our website to use. Just head to "Settings > API keys" and choose "Add API key" in the top right. This should allow you to find two important variables: a **Space ID** and a **Content Delivery API access token.** You'll need these for some important environment variables in your local repo.
 
 ## Whipping up a basic NextJS site
 
@@ -43,9 +43,9 @@ If you already have a Next project to work off of, great! Go `cd` into that thin
 npx create-next-app dope-contentful-example
 ```
 
-💡 _**Note:** You can optionally include the `--use-npm` flag if you want to ditch Yarn. By default, Next will set up your project with [Yarn](https://classic.yarnpkg.com/en/) if you have it installed globally. [It's your prerogative](https://www.youtube.com/watch?v=5cDLZqe735k) though!_
+💡 _**Note:** You can optionally include the `--use-npm` flag if you want to ditch [Yarn](https://classic.yarnpkg.com/en/). By default, Next will set up your project with Yarn if you have it installed globally. [It's your prerogative](https://www.youtube.com/watch?v=5cDLZqe735k) though!_
 
-You may have found a "NextJS + Contentful" example in their docs as well. **Don't install that one!** We'll be using GraphQL for this demo, which has a slightly different setup.
+You may have found a "NextJS + Contentful" example in the Next docs as well. **Don't install that one!** We'll be using GraphQL for this demo, which has a slightly different setup.
 
 Now, just `cd` into your new NextJS project and create a `.env` file with the following info:
 
@@ -60,7 +60,7 @@ Just fill these in with your API keys and you're good to go! Yes, **the `NEXT_PU
 
 Alright, so we've set the stage. _Now let's fetch our data!_
 
-We'll be using GraphiQL to so we can view our "schemas" with a nice GUI. [**You can install this tool here**](https://www.electronjs.org/apps/graphiql), using either homebrew on MacOS or the [Linux Subsystem](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on Windows. Otherwise, if you want to follow along as a `curl` or Postman warrior, be my guest!
+We'll be using GraphiQL to view our "schemas" with a nice GUI. [**You can install this tool here**](https://www.electronjs.org/apps/graphiql), using either homebrew on MacOS or the [Linux Subsystem](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on Windows. Otherwise, if you want to follow along as a `curl` or Postman warrior, be my guest!
 
 Opening the app for the first time, you should see a screen like this:
 
@@ -84,19 +84,19 @@ After saving, you should see some info appear in your "Documentation Explorer." 
 
 Neat! From here, you should see all of the content models you created in your Contentful space. You'll notice there's a distinction between individual entries and a "collection" (i.e. `executiveBoardMember` vs. `executiveBoardMemberCollection`). This is because each represents a different **query** you can perform in your API call. If this terminology confuses you, here's a quick breakdown:
 
-- items highlighted in **blue** represent **queries** you can perform. These are similar to REST endpoints, as they accept parameters and return a structured response. The main difference is being able to _nest queries within other queries_ to retrieve nested content. We'll explore this concept through example!
-- items highlighted in **purple** represent **parameters** you can pass for a given query. For example, I can query for an individual `ExecutiveBoardMember` based on `id` or `locale` (we'll ignore the `preview` param for this tutorial), or query for a collection / list of members (`ExecutiveBoardMemberCollection`) filtering by `locale`, amount of entries (`limit`), sort `order`, and a number of other properties.
+- items highlighted in **blue** represent **queries** you can perform. These are similar to REST endpoints, as they accept parameters and return a structured response. The main difference is being able to _nest queries within other queries_ to retrieve nested content. We'll explore this concept through example.
+- items highlighted in **purple** represent **parameters** you can pass for a given query. As shown in the screenshot above, you can query for an individual `ExecutiveBoardMember` based on `id` or `locale` (we'll ignore the `preview` param for this tutorial), or query for a collection / list of members (`ExecutiveBoardMemberCollection`) filtering by `locale`, amount of entries (`limit`), sort `order`, and a number of other properties.
 - items highlighted in **yellow** represent **the shape of the response** you receive from a given query. This allows you to pull out the _exact_ keys of a given content entry that you want, with type checking built-in. Each of these are hyperlinks, so click on them to inspect the nested queries and response types!
 
 ### Getting our hands dirty
 
-Let's jump into an example. First, let's just get the list of names and emails for all "Executive Board Member" entries. You can follow along Since we're looking for multiple entries, we'll use the `executiveBoardMemberCollection` query for this.
+Let's jump into an example. First, let's just get the list of names and emails for all "Executive Board Member" entries. If you're following along with your own Contentful space, just pick a few text-based keys you want to retrieve from your content model. Since we're looking for multiple entries, we'll use the `executiveBoardMemberCollection` query for this.
 
 Clicking into the yellow `ExecutiveBoardMemberCollection` link (following the colon : at the end of the query), we should see a few options we're free to retrieve: **total, skip, limit, and items.** You'll see these 4 queries on every collection you create, where **items** represents the actual list of items you're hoping to retrieve. Let's click into the response type for **items** to see the shape of our content:
 
 ![Schema for our Executive Board Member content model](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-exec-member-entry.jpg)
 
-This should look really similar to the content model you wrote in Contentful! As you can see, we can query for any of these fields to retrieve a response (most of them being strings in this example).
+This looks really similar to the content model we wrote in Contentful! As you can see, we can query for any of these fields to retrieve a response (most of them being strings in this example).
 
 ###Writing your first query
 
@@ -111,7 +111,7 @@ executiveBoardMemberCollection -> query for a collection of entries
     email -> and the email
 ```
 
-We can simply convert this skeleton to the JSON-y syntax GraphQL expects:
+We can convert this skeleton to the JSON-y syntax GraphQL expects:
 
 ```js
 {
@@ -124,7 +124,7 @@ We can simply convert this skeleton to the JSON-y syntax GraphQL expects:
 }
 ```
 
-Just enter this into GraphiQL's textbook and hit play ▶️
+... and enter this into GraphiQL's textbox and hit play ▶️
 
 ![Entering our query into GraphiQL, with response data appearing on the right](https://raw.githubusercontent.com/Holben888/personal-blog/main/nextjs-contentful/graphiql-response.jpg)
 
@@ -146,7 +146,7 @@ In our case, our query should look something like this:
 executiveBoardMemberCollection(where: {linkedIn_exists: true}) { ... }
 ```
 
-...and our result should filter out members without a LinkedIn entry!
+...and our result should filter out members without a LinkedIn entry.
 
 ## Pulling our data into NextJS
 
@@ -190,7 +190,7 @@ export async function getStaticProps() {
         body: JSON.stringify({
           // all requests start with "query: ", so we'll stringify that for convenience
           query: `
-					{
+          {
             executiveBoardMemberCollection {
               items {
                 name
@@ -252,7 +252,7 @@ Hopefully, you'll see your own Contentful entries pop onto the page 🎉
 
 ### Writing a reusable helper functions
 
-This all works great, but it gets pretty repetitive generating this API call on every page. That's why we wrote a little helper function on our project to streamline the process!
+This all works great, but it gets pretty repetitive generating this API call on every page. That's why we wrote a little helper function on our project to streamline the process.
 
 In short, we're gonna move all our API call logic into a utility function, accepting the actual "body" of our query as a parameter. Here's how that could look:
 
@@ -265,7 +265,7 @@ export async function fetchContent(query) {
   // add a try / catch loop for nicer error handling
   try {
     const res = await fetch(
-      `https://graphql.contentful.com/content/v1/spaces/${space}/environments/master`,
+      `https://graphql.contentful.com/content/v1/spaces/${space}`,
       {
         method: 'POST',
         headers: {
@@ -286,11 +286,9 @@ export async function fetchContent(query) {
   }
 }
 
-export default fetchContent;
-
 ```
 
-Aside from our little catch statement for errors, this should look super familiar. Now, we can refactor our `getStaticProps` function to something like this:
+Aside from our little catch statement for errors, this is the same fetch call we were making before. Now, we can refactor our `getStaticProps` function to something like this:
 
 ```js
 import { fetchContent } from '@utils/contentful'
@@ -303,9 +301,9 @@ export async function getStaticProps() {
     			name
     			email
     		}
-    	}
-    }
-	`);
+    	  }
+      }
+  `);
   return {
     props: {
       execBoardMembers: response.executiveBoardMemberCollection.items,
@@ -314,7 +312,7 @@ export async function getStaticProps() {
 }
 ```
 
-Now, you're ready to make contentful queries all across your site ✨
+...and we're ready to make Contentful queries across the site ✨
 
 ### Aside: use the "@" as a shortcut to directories
 
@@ -332,7 +330,7 @@ You may have noticed that `import` statement in the above example, accessing `fe
 }
 ```
 
-Now, you can reference anything inside `/utils` using this decorator! For convenience, we added an entry for `@components` as well, since NextJS projects tend to pull from that directory a lot 👍
+Now, you can reference anything inside `/utils` using this decorator. For convenience, we added an entry for `@components` as well, since NextJS projects tend to pull from that directory a lot 👍
 
 ### Using a special Contentful package to format rich text
 
@@ -356,12 +354,12 @@ function AboutPage(execBoardMember) {
     <div
     dangerouslySetInnerHTML={{
     __html: documentToHtmlString(execBoardMember.description.json),
-		}}></div>
+    }}></div>
   )
 }
 ```
 
-Yes, using `dangerouslySetInnerHTML` is pretty tedious. We'd suggest making a `RichText` component to render your HTML as your app expands.
+Yes, using `dangerouslySetInnerHTML` is pretty tedious. We'd suggest making a `RichText` component to render your HTML.
 
 ## Check out our project to see how we put it together 🚀
 
@@ -380,4 +378,3 @@ I love writing about this sort of stuff 👨‍💻
 🐦 [**Follow my Twitter for random web dev tips and articles I find cool**](https://twitter.com/bholmesdev)
 
 📗 [**Follow my personal blog for new posts every 2-3 weeks**](https://dev.to/bholmesdev)
-
