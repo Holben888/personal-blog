@@ -6,22 +6,22 @@ I think this is my problem above all: **I need to write something down, but I do
 
 So, let's talk about:
 
-1. Why Notion isn't cutting it for me
-2. What the second brain / Zettelkasten method is
-3. How Foam + VS Code helped me find a groove with personal notetaking 
+1. 🙅‍♂️ Why Notion isn't cutting it for me
+2. 📜 What the second brain / Zettelkasten method is
+3. 🕺 How Foam + VS Code helped me find a groove with personal notetaking 
 
 Onwards!
 
 ## Why not Notion?
 
-This is the main reason I just _can't_ get into using something like [Notion](https://notion.so) for personal notes. Yes, there's a lot to fall in love with from a developer's perspective:
+[Notion](https://notion.so) has quickly become the go-to recommendation for personal notes and journals. There's definitely a lot to fall in love with from a developer's perspective:
 
 - Easy to whip up code snippets with syntax highlighting
 - Easy export to markdown
 - Tons of integration options for *data tables*, if you're into that kind of thing
 - Keyboard shortcuts galore
 
-etc etc etc. But in the end, getting into Notion is a lot like getting into Vim. **You spend 30% of your time in efficiency heaven, and another 70% setting up the tool itself!** As a UI designer and developer myself, I just can't deal with all these knobs and switches. It's so tempting to tweak everything to perfection... and once the dust has settled, I still can't find that code snippet I made a week ago 😔
+etc etc etc. But from what I've found, getting into Notion is a lot like getting into Vim. **You spend 30% of your time in efficiency heaven, and another 70% setting up the tool itself!** As a UI designer and developer myself, I just can't deal with all these knobs and switches. It's so tempting to tweak everything to perfection... and once the dust has settled, I still can't find that code snippet I made a week ago 😔
 
 I also don't see any updates helping me from this perspective. My problem is really the fundamental approach of Notion: let the user build *their own* UI with as much flexibility as possible. I don't really need all this flexibility if I'm just journaling my thoughts and todos.
 
