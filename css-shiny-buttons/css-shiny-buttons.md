@@ -6,15 +6,15 @@ tags: css, javascript, webdev, showdev
 cover_image: https://raw.githubusercontent.com/Holben888/personal-blog/main/css-shiny-buttons/thumbnail.png
 ---
 
-> Using CSS variables + any frontend framework to add a metallic shine to your UI
+_Using CSS variables + any frontend framework to add a metallic shine to your UI_
 
 Hover states are probably the most fun a developer can have when a designer isn't looking. You've seen the basics at this point; fade-ins, growing and shrinking, color shifts, [animated rainbow gradients](https://www.joshwcomeau.com/react/rainbow-button/), etc etc etc.
 
-But there was one animation that inspired me recently (props to Keyframers for shouting it out)
+But there was one animation that inspired me recently (props [to Keyframers](https://www.youtube.com/watch?v=VBkGe1TxEuI&t=225s) for shouting it out!)
 
 {% twitter 1278384065087893505 %}
 
-This one's unique since it isn't some "static" hover state that always looks the same. It actually *tracks your mouse moment* to make the page even more interactive! This seemed like such a cool idea... that we threw it all over our [Hack4Impact](https://hack4impact.org) site 😁
+This one's unique since it isn't some "static" hover state that always looks the same. It actually *tracks your mouse moment* to make the page even more interactive. This seemed like such a cool idea... that we threw it all over our [Hack4Impact](https://hack4impact.org) site 😁
 
 So let's explore
 
@@ -108,10 +108,7 @@ There's some caveats to this of course. Namely, CSS variables **are always strin
 
 Here's a fully working example to *pump* up your confidence 🎈
 
-<iframe height="265" style="width: 100%;" scrolling="no" title="Balloon pump with CSS variables 🎈" src="https://codepen.io/bholmesdev/embed/vYXogza?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/bholmesdev/pen/vYXogza'>Balloon pump with CSS variables 🎈</a> by Benjamin Holmes
-  (<a href='https://codepen.io/bholmesdev'>@bholmesdev</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
+{% codepen https://codepen.io/bholmesdev/pen/vYXogza default-tab=js,result %}
 
 ## ✨ Let's get rolling on our shiny button
 
@@ -150,12 +147,7 @@ _**Side note:** You may have noticed our 8-digit hex code on the gradient backgr
 
 Great! With this in place, we should see a subtle, stationary gradient covering our button.
 
-<iframe height="265" style="width: 100%;" scrolling="no" title="Shiny button 1 - Getting our button styles" src="https://codepen.io/bholmesdev/embed/LYbPjNQ?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/bholmesdev/pen/LYbPjNQ'>Shiny button 1 - Getting our button styles</a> by Benjamin Holmes
-  (<a href='https://codepen.io/bholmesdev'>@bholmesdev</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
-
-
+{% codepen https://codepen.io/bholmesdev/pen/LYbPjNQ default-tab=css,result %}
 
 ##🪤 Now, lets track some mouse cursors
 
@@ -170,10 +162,7 @@ button.addEventListener('mousemove', (e) => {
 
 If we log out or `event` object, we'll find some useful values in here. The main one's we're focusing on are `clientX` and `clientY`, which tell you the mouse position **relative to the entire screen.** Hover over this button to see what those values look like:
 
-<iframe height="265" style="width: 100%;" scrolling="no" title="Shiny button 1 - Basic button hover" src="https://codepen.io/bholmesdev/embed/yLVBNzE?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/bholmesdev/pen/yLVBNzE'>Shiny button 1 - Basic button hover</a> by Benjamin Holmes
-  (<a href='https://codepen.io/bholmesdev'>@bholmesdev</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
+{% codepen https://codepen.io/bholmesdev/pen/yLVBNzE default-tab=js,result %}
 
 This is pretty useful, but it's not _quite_ the info we're looking for. Remember that our shiny effect is positioned _relative_ to the button surrounding it. For instance, to position the effect at the top-left corner of the button, we'd need to set `top: 0; left: 0;` So, we'd expect a reading of `x: 0 y: 0` when we hover in our example above... But this definitely _isn't_ the values that `clientX` and `clientY` give us 😕
 
@@ -181,10 +170,7 @@ There isn't a magical `event` property for this, so we'll need to get a little c
 
 This is probably best explored with visuals. Hover your mouse around to see how our `mouse` values, `boundingClientRect` values, and subtracted values all interact:
 
-<iframe height="265" style="width: 100%;" scrolling="no" title="Shiny button 3 - All our values" src="https://codepen.io/bholmesdev/embed/YzpKGbo?height=265&theme-id=light&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/bholmesdev/pen/YzpKGbo'>Shiny button 3 - All our values</a> by Benjamin Holmes
-  (<a href='https://codepen.io/bholmesdev'>@bholmesdev</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
+{% codepen https://codepen.io/bholmesdev/pen/YzpKGbo default-tab=js,result %}
 
 ## 💅 Pipe those coordinates into CSS 
 
@@ -240,10 +226,7 @@ We could fix this from JavaScript to show and hide the effect. But why do that w
 
 Boom! Just add a one-line transition effect, and we get a nice fade-in. Here's our finished product ✨
 
-<iframe height="265" style="width: 100%;" scrolling="no" title="Shiny button 4 - Putting it all together" src="https://codepen.io/bholmesdev/embed/RwobPJG?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/bholmesdev/pen/RwobPJG'>Shiny button 4 - Putting it all together</a> by Benjamin Holmes
-  (<a href='https://codepen.io/bholmesdev'>@bholmesdev</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
+{% codepen https://codepen.io/bholmesdev/pen/RwobPJG default-tab=css,result %}
 
 ## 🔨 Adapt to your framework of choice
 
